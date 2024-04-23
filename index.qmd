@@ -1,5 +1,12 @@
 ---
 title: "2024-SatRdays-London"
+author: "Hannah Frick"
+format: revealjs
+knitr:
+  opts_chunk: 
+    echo: true
+    collapse: true
+    comment: "#>"
 ---
 
 This is a Quarto website.
