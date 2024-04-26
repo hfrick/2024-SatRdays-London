@@ -1,0 +1,142 @@
+[
+  {
+    "objectID": "index.html#extensive",
+    "href": "index.html#extensive",
+    "title": "Survival analysis is coming to tidymodels!",
+    "section": "Extensive",
+    "text": "Extensive\nresampling, preprocessing, models, metrics, tuning strategies"
+  },
+  {
+    "objectID": "index.html#extendable",
+    "href": "index.html#extendable",
+    "title": "Survival analysis is coming to tidymodels!",
+    "section": "Extendable",
+    "text": "Extendable"
+  },
+  {
+    "objectID": "index.html#customer-churn",
+    "href": "index.html#customer-churn",
+    "title": "Survival analysis is coming to tidymodels!",
+    "section": "Customer churn",
+    "text": "Customer churn\n\nwa_churn\n\n\n#&gt; # A tibble: 7,032 × 18\n#&gt;   tenure churn female senior_citizen partner dependents phone_service\n#&gt;    &lt;int&gt; &lt;fct&gt;  &lt;dbl&gt;          &lt;int&gt;   &lt;dbl&gt;      &lt;dbl&gt;         &lt;dbl&gt;\n#&gt; 1      1 No         1              0       1          0             0\n#&gt; 2     34 No         0              0       0          0             1\n#&gt; 3      2 Yes        0              0       0          0             1\n#&gt; 4     45 No         0              0       0          0             0\n#&gt; 5      2 Yes        1              0       0          0             1\n#&gt; 6      8 Yes        1              0       0          0             1\n#&gt; # ℹ 7,026 more rows\n#&gt; # ℹ 11 more variables: multiple_lines &lt;chr&gt;, internet_service &lt;fct&gt;,\n#&gt; #   online_security &lt;chr&gt;, online_backup &lt;chr&gt;,\n#&gt; #   device_protection &lt;chr&gt;, tech_support &lt;chr&gt;, streaming_tv &lt;chr&gt;,\n#&gt; #   streaming_movies &lt;chr&gt;, paperless_billing &lt;dbl&gt;,\n#&gt; #   payment_method &lt;fct&gt;, monthly_charges &lt;dbl&gt;"
+  },
+  {
+    "objectID": "index.html#what-might-you-want-to-model-with-these-data",
+    "href": "index.html#what-might-you-want-to-model-with-these-data",
+    "title": "Survival analysis is coming to tidymodels!",
+    "section": "What might you want to model with these data?",
+    "text": "What might you want to model with these data?\nLet’s try to predict:\n\n\nHow long is somebody going to stay as a customer?\n\n\n\n\nWho is likely to stop being a customer?"
+  },
+  {
+    "objectID": "index.html#what-if-we-just-use-the-time",
+    "href": "index.html#what-if-we-just-use-the-time",
+    "title": "Survival analysis is coming to tidymodels!",
+    "section": "What if we just use the time?",
+    "text": "What if we just use the time?\n\n\nThat time is observation time, not time to event."
+  },
+  {
+    "objectID": "index.html#what-if-we-just-use-the-time-1",
+    "href": "index.html#what-if-we-just-use-the-time-1",
+    "title": "Survival analysis is coming to tidymodels!",
+    "section": "What if we just use the time?",
+    "text": "What if we just use the time?\n\nIf we assume that’s time-to-event, we assume everything is an event."
+  },
+  {
+    "objectID": "index.html#what-we-actually-have",
+    "href": "index.html#what-we-actually-have",
+    "title": "Survival analysis is coming to tidymodels!",
+    "section": "What we actually have",
+    "text": "What we actually have\n\n\n\nusing censored obs as events underestimates the survival time\ndiscarding censored obs also biases the results\nwait until we observe everything? not always possible (dropout of study)"
+  },
+  {
+    "objectID": "index.html#uncomfy",
+    "href": "index.html#uncomfy",
+    "title": "Survival analysis is coming to tidymodels!",
+    "section": "Uncomfy",
+    "text": "Uncomfy\nIf we use regression to model time-to-event data, we might\n\nanswer a different question\nmake wrong assumptions\nwaste information"
+  },
+  {
+    "objectID": "index.html#what-if-we-just-use-the-event-status",
+    "href": "index.html#what-if-we-just-use-the-event-status",
+    "title": "Survival analysis is coming to tidymodels!",
+    "section": "What if we just use the event status?",
+    "text": "What if we just use the event status?\n\n\nWho is likely to stop being a customer while we observe them?"
+  },
+  {
+    "objectID": "index.html#uncomfy-1",
+    "href": "index.html#uncomfy-1",
+    "title": "Survival analysis is coming to tidymodels!",
+    "section": "Uncomfy",
+    "text": "Uncomfy\n\nIf we use classification to model (time-to-)event data, we\nignore the (possibly wildly) different observation length."
+  },
+  {
+    "objectID": "index.html#our-challenge",
+    "href": "index.html#our-challenge",
+    "title": "Survival analysis is coming to tidymodels!",
+    "section": "Our challenge",
+    "text": "Our challenge\n\nTime-to-event data inherently has two aspects: time and event status.\nCensoring: incomplete data is not missing data.\n\n\n\nWith regression and classification we can only model one aspect, separately, without being able to properly account for the other aspect."
+  },
+  {
+    "objectID": "index.html#customer-churn-1",
+    "href": "index.html#customer-churn-1",
+    "title": "Survival analysis is coming to tidymodels!",
+    "section": "Customer churn",
+    "text": "Customer churn\n\ntelco_churn &lt;- wa_churn %&gt;% \n  mutate(\n    churn_surv = Surv(tenure, if_else(churn == \"Yes\", 1, 0)),\n    .keep = \"unused\"\n  )\n\n\n\nSurv = response\nmodify response outside of recipes"
+  },
+  {
+    "objectID": "index.html#split-the-data",
+    "href": "index.html#split-the-data",
+    "title": "Survival analysis is coming to tidymodels!",
+    "section": "Split the data",
+    "text": "Split the data\n\nset.seed(403)\ntelco_split &lt;- initial_split(telco_churn)\ntelco_train &lt;- training(telco_split)\ntelco_test &lt;- testing(telco_split)\n\ntelco_rs &lt;- vfold_cv(telco_train)"
+  },
+  {
+    "objectID": "index.html#a-single-model",
+    "href": "index.html#a-single-model",
+    "title": "Survival analysis is coming to tidymodels!",
+    "section": "A single model",
+    "text": "A single model\n\ntelco_rec &lt;- recipe(churn_surv ~ ., data = telco_train) %&gt;% \n  step_zv(all_predictors()) \n\ntelco_spec &lt;- survival_reg() %&gt;%\n  set_mode(\"censored regression\") %&gt;%\n  set_engine(\"survival\")\n\ntelco_wflow &lt;- workflow() %&gt;%\n  add_recipe(telco_rec) %&gt;%\n  add_model(telco_spec)\n\ntelco_fit &lt;- fit(telco_wflow, data = telco_train)"
+  },
+  {
+    "objectID": "index.html#how-long-is-somebody-going-to-stay-as-a-customer-1",
+    "href": "index.html#how-long-is-somebody-going-to-stay-as-a-customer-1",
+    "title": "Survival analysis is coming to tidymodels!",
+    "section": "How long is somebody going to stay as a customer?",
+    "text": "How long is somebody going to stay as a customer?\n\npredict(telco_fit, new_data = telco_train[1:5, ], type = \"time\")\n#&gt; # A tibble: 5 × 1\n#&gt;   .pred_time\n#&gt;        &lt;dbl&gt;\n#&gt; 1     262.  \n#&gt; 2     113.  \n#&gt; 3      43.6 \n#&gt; 4       6.55\n#&gt; 5     130."
+  },
+  {
+    "objectID": "index.html#who-is-likely-to-stop-being-a-customer-1",
+    "href": "index.html#who-is-likely-to-stop-being-a-customer-1",
+    "title": "Survival analysis is coming to tidymodels!",
+    "section": "Who is likely to stop being a customer?",
+    "text": "Who is likely to stop being a customer?\n\npred_survival &lt;- predict(telco_fit, new_data = telco_train[1:5, ], \n                         type = \"survival\", eval_time = c(12, 24))\n\npred_survival\n#&gt; # A tibble: 5 × 1\n#&gt;   .pred           \n#&gt;   &lt;list&gt;          \n#&gt; 1 &lt;tibble [2 × 2]&gt;\n#&gt; 2 &lt;tibble [2 × 2]&gt;\n#&gt; 3 &lt;tibble [2 × 2]&gt;\n#&gt; 4 &lt;tibble [2 × 2]&gt;\n#&gt; 5 &lt;tibble [2 × 2]&gt;"
+  },
+  {
+    "objectID": "index.html#who-is-likely-to-stop-being-a-customer-2",
+    "href": "index.html#who-is-likely-to-stop-being-a-customer-2",
+    "title": "Survival analysis is coming to tidymodels!",
+    "section": "Who is likely to stop being a customer?",
+    "text": "Who is likely to stop being a customer?\n\npred_survival$.pred[[1]]\n#&gt; # A tibble: 2 × 2\n#&gt;   .eval_time .pred_survival\n#&gt;        &lt;dbl&gt;          &lt;dbl&gt;\n#&gt; 1         12          0.931\n#&gt; 2         24          0.878"
+  },
+  {
+    "objectID": "index.html#tidymodels-for-survival-analysis",
+    "href": "index.html#tidymodels-for-survival-analysis",
+    "title": "Survival analysis is coming to tidymodels!",
+    "section": "tidymodels for survival analysis",
+    "text": "tidymodels for survival analysis\n\nModels:\nparametric, semi-parametric, and tree-based\nPredictions:\nsurvival time, survival probability, hazard, and linear predictor\nMetrics:\nconcordance index, Brier score, integrated Brier score, AUC ROC"
+  },
+  {
+    "objectID": "index.html#tidymodels-for-survival-analysis-1",
+    "href": "index.html#tidymodels-for-survival-analysis-1",
+    "title": "Survival analysis is coming to tidymodels!",
+    "section": "tidymodels for survival analysis",
+    "text": "tidymodels for survival analysis"
+  },
+  {
+    "objectID": "index.html#learn-more-via-articles-on-tidymodels.org",
+    "href": "index.html#learn-more-via-articles-on-tidymodels.org",
+    "title": "Survival analysis is coming to tidymodels!",
+    "section": "Learn more via articles on tidymodels.org",
+    "text": "Learn more via articles on tidymodels.org\n\nHow long until building complaints are dispositioned? A survival analysis case study\nDynamic Performance Metrics for Event Time Data\nAccounting for Censoring in Performance Metrics for Event Time Data\n\n\n\n\nhttps://hfrick.github.io/2024-SatRdays-London"
+  }
+]

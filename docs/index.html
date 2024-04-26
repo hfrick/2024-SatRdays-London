@@ -11,7 +11,7 @@
   <meta name="generator" content="quarto-1.4.552">
 
   <meta name="author" content="Hannah Frick">
-  <title>2024-SatRdays-London</title>
+  <title>2024-SatRdays-London - Survival analysis is coming to tidymodels!</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -56,46 +56,47 @@
         -khtml-user-select: none; -moz-user-select: none;
         -ms-user-select: none; user-select: none;
         padding: 0 4px; width: 4em;
-        color: #aaaaaa;
+        color: #767676;
       }
-    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #767676;  padding-left: 4px; }
     div.sourceCode
-      { color: #003b4f; background-color: #f1f3f5; }
+      { color: #545454; background-color: #fefefe; }
     @media screen {
     pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
     }
-    code span { color: #003b4f; } /* Normal */
-    code span.al { color: #ad0000; } /* Alert */
-    code span.an { color: #5e5e5e; } /* Annotation */
-    code span.at { color: #657422; } /* Attribute */
-    code span.bn { color: #ad0000; } /* BaseN */
+    code span { color: #545454; } /* Normal */
+    code span.al { color: #7928a1; } /* Alert */
+    code span.an { color: #696969; } /* Annotation */
+    code span.at { color: #a55a00; } /* Attribute */
+    code span.bn { color: #7928a1; } /* BaseN */
     code span.bu { } /* BuiltIn */
-    code span.cf { color: #003b4f; } /* ControlFlow */
-    code span.ch { color: #20794d; } /* Char */
-    code span.cn { color: #8f5902; } /* Constant */
-    code span.co { color: #5e5e5e; } /* Comment */
-    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
-    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
-    code span.dt { color: #ad0000; } /* DataType */
-    code span.dv { color: #ad0000; } /* DecVal */
-    code span.er { color: #ad0000; } /* Error */
+    code span.cf { color: #d91e18; } /* ControlFlow */
+    code span.ch { color: #008000; } /* Char */
+    code span.cn { color: #d91e18; } /* Constant */
+    code span.co { color: #696969; } /* Comment */
+    code span.cv { color: #696969; font-style: italic; } /* CommentVar */
+    code span.do { color: #696969; font-style: italic; } /* Documentation */
+    code span.dt { color: #7928a1; } /* DataType */
+    code span.dv { color: #7928a1; } /* DecVal */
+    code span.er { color: #7928a1; } /* Error */
     code span.ex { } /* Extension */
-    code span.fl { color: #ad0000; } /* Float */
-    code span.fu { color: #4758ab; } /* Function */
-    code span.im { color: #00769e; } /* Import */
-    code span.in { color: #5e5e5e; } /* Information */
-    code span.kw { color: #003b4f; } /* Keyword */
-    code span.op { color: #5e5e5e; } /* Operator */
-    code span.ot { color: #003b4f; } /* Other */
-    code span.pp { color: #ad0000; } /* Preprocessor */
-    code span.sc { color: #5e5e5e; } /* SpecialChar */
-    code span.ss { color: #20794d; } /* SpecialString */
-    code span.st { color: #20794d; } /* String */
-    code span.va { color: #111111; } /* Variable */
-    code span.vs { color: #20794d; } /* VerbatimString */
-    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+    code span.fl { color: #a55a00; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #696969; } /* Information */
+    code span.kw { color: #d91e18; } /* Keyword */
+    code span.op { color: #00769e; } /* Operator */
+    code span.ot { color: #d91e18; } /* Other */
+    code span.pp { color: #7928a1; } /* Preprocessor */
+    code span.sc { color: #00769e; } /* SpecialChar */
+    code span.ss { color: #008000; } /* SpecialString */
+    code span.st { color: #008000; } /* String */
+    code span.va { color: #a55a00; } /* Variable */
+    code span.vs { color: #008000; } /* VerbatimString */
+    code span.wa { color: #696969; font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="site_libs/revealjs/dist/theme/quarto.css">
+  <link rel="stylesheet" href="styles.css">
   <link href="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -391,7 +392,8 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">2024-SatRdays-London</h1>
+  <h1 class="title">Survival analysis is coming to tidymodels!</h1>
+  <p class="subtitle">SatRdays London 2024</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -402,21 +404,389 @@ Hannah Frick
 </div>
 
 </section>
+<section id="tidymodels-can-do-survival-analysis" class="title-slide slide level1 center">
+<h1>tidymodels can do survival analysis</h1>
+
+</section>
+
+<section id="tidymodels-can-deal-with-time-to-event-data" class="title-slide slide level1 center">
+<h1>tidymodels can deal with time-to-event data</h1>
+
+</section>
+
+<section>
+<section id="why-tidymodels" class="title-slide slide level1 center">
+<h1>Why tidymodels?</h1>
+
+</section>
 <section class="slide level2">
 
-<p>This is a Quarto website.</p>
-<p>To learn more about Quarto websites visit <a href="https://quarto.org/docs/websites" class="uri">https://quarto.org/docs/websites</a>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span></span>
-<span id="cb1-2"><a></a><span class="co">#&gt; [1] 2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><br><br><br></p>
+<div class="r-fit-text">
+<p>tidymodels is a framework for modelling and</p>
+<p>machine learning using tidyverse principles.</p>
 </div>
+</section>
+<section class="slide level2">
+
+<p><br><br><br></p>
+<div class="r-fit-text">
+<p>Focus on the modelling question,</p>
+<p>not the syntax.</p>
+</div>
+<aside class="notes">
+<ul>
+<li>unify: switch easily between models</li>
+<li>consistency:</li>
+<li>composable functions support chunking
+<ul>
+<li>object (a recipe) to hold all preprocessing, apply it in various places</li>
+</ul></li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section class="slide level2">
+
+<p><br><br><br></p>
+<div class="r-fit-text">
+<p>Focus on the modelling question,</p>
+<p>not data spending.</p>
+</div>
+<aside class="notes">
+<ul>
+<li>no accidential data leakage</li>
+<li>workflows bundle preprocessor and model for resampling</li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section class="slide level2">
+
+<p><br><br><br></p>
+<div class="r-fit-text">
+<p>Focus on the modelling question,</p>
+<p>not tracking your scripts.</p>
+</div>
+<aside class="notes">
+<p>workflows make (preprocessor + model) easier to track workflowsets make workflows easier to track</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="extensive" class="slide level2" data-background-image="images/hex-core-pkgs.jpeg">
+<h2>Extensive</h2>
+<p>resampling, preprocessing, models, metrics, tuning strategies</p>
+</section>
+<section id="extendable" class="slide level2" data-background-image="images/hex-extension-pkgs.jpeg">
+<h2>Extendable</h2>
+</section>
+<section id="section" class="slide level2" data-background-iframe="https://www.tidymodels.org/learn/#category=developer%20tools">
+<h2></h2>
+<div class="footer">
+
+</div>
+</section></section>
+<section>
+<section id="why-survival-analysis" class="title-slide slide level1 center">
+<h1>Why survival analysis?</h1>
+
+</section>
+<section id="customer-churn" class="slide level2">
+<h2>Customer churn</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a>wa_churn</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<pre><code>#&gt; # A tibble: 7,032 × 18
+#&gt;   tenure churn female senior_citizen partner dependents phone_service
+#&gt;    &lt;int&gt; &lt;fct&gt;  &lt;dbl&gt;          &lt;int&gt;   &lt;dbl&gt;      &lt;dbl&gt;         &lt;dbl&gt;
+#&gt; 1      1 No         1              0       1          0             0
+#&gt; 2     34 No         0              0       0          0             1
+#&gt; 3      2 Yes        0              0       0          0             1
+#&gt; 4     45 No         0              0       0          0             0
+#&gt; 5      2 Yes        1              0       0          0             1
+#&gt; 6      8 Yes        1              0       0          0             1
+#&gt; # ℹ 7,026 more rows
+#&gt; # ℹ 11 more variables: multiple_lines &lt;chr&gt;, internet_service &lt;fct&gt;,
+#&gt; #   online_security &lt;chr&gt;, online_backup &lt;chr&gt;,
+#&gt; #   device_protection &lt;chr&gt;, tech_support &lt;chr&gt;, streaming_tv &lt;chr&gt;,
+#&gt; #   streaming_movies &lt;chr&gt;, paperless_billing &lt;dbl&gt;,
+#&gt; #   payment_method &lt;fct&gt;, monthly_charges &lt;dbl&gt;</code></pre>
+</div>
+</section>
+<section id="what-might-you-want-to-model-with-these-data" class="slide level2">
+<h2>What might you want to model with these data?</h2>
+<p>Let’s try to predict:</p>
+<div class="fragment">
+<ul>
+<li>How long is somebody going to stay as a customer?</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Who is likely to stop being a customer?</li>
+</ul>
+<!-- Everything is a nail when you only have a hammer. -->
+</div>
+</section></section>
+<section>
+<section id="how-long-is-somebody-going-to-stay-as-a-customer" class="title-slide slide level1 center">
+<h1>How long is somebody going to stay as a customer?</h1>
+
+</section>
+<section id="what-if-we-just-use-the-time" class="slide level2">
+<h2>What if we just use the time?</h2>
+
+<img data-src="index_files/figure-revealjs/df_illustration-1.png" class="quarto-figure quarto-figure-center r-stretch" width="960"><div class="fragment">
+<p>That time is <strong>observation time</strong>, not <strong>time to event</strong>.</p>
+</div>
+</section>
+<section id="what-if-we-just-use-the-time-1" class="slide level2">
+<h2>What if we just use the time?</h2>
+
+<img data-src="index_files/figure-revealjs/unnamed-chunk-3-1.png" class="quarto-figure quarto-figure-center r-stretch" width="960"><p>If we assume that’s time-to-event, <strong>we assume everything is an event</strong>.</p>
+</section>
+<section id="what-we-actually-have" class="slide level2">
+<h2>What we actually have</h2>
+
+<img data-src="index_files/figure-revealjs/unnamed-chunk-4-1.png" class="quarto-figure quarto-figure-center r-stretch" width="960"><aside class="notes">
+<ul>
+<li>using censored obs as events underestimates the survival time</li>
+<li>discarding censored obs also biases the results</li>
+<li>wait until we observe everything? not always possible (dropout of study)</li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="uncomfy" class="slide level2">
+<h2>Uncomfy</h2>
+<p>If we use regression to model time-to-event data, we might</p>
+<ul>
+<li>answer a different question</li>
+<li>make wrong assumptions</li>
+<li>waste information</li>
+</ul>
+</section></section>
+<section>
+<section id="who-is-likely-to-stop-being-a-customer" class="title-slide slide level1 center">
+<h1>Who is likely to stop being a customer?</h1>
+
+</section>
+<section id="what-if-we-just-use-the-event-status" class="slide level2">
+<h2>What if we just use the event status?</h2>
+
+<img data-src="index_files/figure-revealjs/unnamed-chunk-5-1.png" class="quarto-figure quarto-figure-center r-stretch" width="960"><div class="fragment">
+<p>Who is likely to stop being a customer <em>while we observe them?</em></p>
+<!-- --- -->
+<!-- 
+
+---
+
+
+FIXME: add translation of this idea to Kaplan-Meier?
+-->
+</div>
+</section>
+<section id="uncomfy-1" class="slide level2">
+<h2>Uncomfy</h2>
+<p><br><br></p>
+<p>If we use classification to model (time-to-)event data, we</p>
+<p>ignore the (possibly wildly) different observation length.</p>
+</section>
+<section id="our-challenge" class="slide level2">
+<h2>Our challenge</h2>
+<ul>
+<li>Time-to-event data inherently has two aspects: time and event status.</li>
+<li>Censoring: incomplete data is not missing data.</li>
+</ul>
+<div class="fragment">
+<ul>
+<li><em>With regression and classification we can only model one aspect, separately, without being able to properly account for the other aspect.</em></li>
+</ul>
+</div>
+</section>
+<section class="slide level2">
+
+<p><br><br></p>
+<blockquote>
+<p>Survival analysis is unique because it simultaneously considers <em>if</em> events happened (i.e.&nbsp;a binary outcome) and <em>when</em> events happened (e.g.&nbsp;a continuous outcome).<sup>1</sup></p>
+</blockquote>
+<aside><ol class="aside-footnotes"><li id="fn1"><p>Denfeld QE, Burger D, Lee CS (2023) <em>Survival analysis 101: an easy start guide to analysing time-to-event data</em>. European Journal of Cardiovascular Nursing, Volume 22, Issue 3, Pages 332–337, <a href="https://doi.org/10.1093/eurjcn/zvad023" class="uri">https://doi.org/10.1093/eurjcn/zvad023</a></p></li></ol></aside></section>
+<section id="section-1" class="slide level2">
+<h2></h2>
+
+<img data-src="images/how-to-draw-an-owl.jpeg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="customer-churn-1" class="slide level2">
+<h2>Customer churn</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a>telco_churn <span class="ot">&lt;-</span> wa_churn <span class="sc">%&gt;%</span> </span>
+<span id="cb3-2"><a></a>  <span class="fu">mutate</span>(</span>
+<span id="cb3-3"><a></a>    <span class="at">churn_surv =</span> <span class="fu">Surv</span>(tenure, <span class="fu">if_else</span>(churn <span class="sc">==</span> <span class="st">"Yes"</span>, <span class="dv">1</span>, <span class="dv">0</span>)),</span>
+<span id="cb3-4"><a></a>    <span class="at">.keep =</span> <span class="st">"unused"</span></span>
+<span id="cb3-5"><a></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<aside class="notes">
+<ul>
+<li>Surv = response</li>
+<li>modify response outside of recipes</li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="split-the-data" class="slide level2">
+<h2>Split the data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" data-code-line-numbers="1-2|3-4|6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a><span class="fu">set.seed</span>(<span class="dv">403</span>)</span>
+<span id="cb4-2"><a></a>telco_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(telco_churn)</span>
+<span id="cb4-3"><a></a>telco_train <span class="ot">&lt;-</span> <span class="fu">training</span>(telco_split)</span>
+<span id="cb4-4"><a></a>telco_test <span class="ot">&lt;-</span> <span class="fu">testing</span>(telco_split)</span>
+<span id="cb4-5"><a></a></span>
+<span id="cb4-6"><a></a>telco_rs <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(telco_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="a-single-model" class="slide level2">
+<h2>A single model</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" data-code-line-numbers="1-2|4-6|8-10|12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a></a>telco_rec <span class="ot">&lt;-</span> <span class="fu">recipe</span>(churn_surv <span class="sc">~</span> ., <span class="at">data =</span> telco_train) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a></a>  <span class="fu">step_zv</span>(<span class="fu">all_predictors</span>()) </span>
+<span id="cb5-3"><a></a></span>
+<span id="cb5-4"><a></a>telco_spec <span class="ot">&lt;-</span> <span class="fu">survival_reg</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb5-5"><a></a>  <span class="fu">set_mode</span>(<span class="st">"censored regression"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-6"><a></a>  <span class="fu">set_engine</span>(<span class="st">"survival"</span>)</span>
+<span id="cb5-7"><a></a></span>
+<span id="cb5-8"><a></a>telco_wflow <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb5-9"><a></a>  <span class="fu">add_recipe</span>(telco_rec) <span class="sc">%&gt;%</span></span>
+<span id="cb5-10"><a></a>  <span class="fu">add_model</span>(telco_spec)</span>
+<span id="cb5-11"><a></a></span>
+<span id="cb5-12"><a></a>telco_fit <span class="ot">&lt;-</span> <span class="fu">fit</span>(telco_wflow, <span class="at">data =</span> telco_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="how-long-is-somebody-going-to-stay-as-a-customer-1" class="slide level2">
+<h2>How long is somebody going to stay as a customer?</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a><span class="fu">predict</span>(telco_fit, <span class="at">new_data =</span> telco_train[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, ], <span class="at">type =</span> <span class="st">"time"</span>)</span>
+<span id="cb6-2"><a></a><span class="co">#&gt; # A tibble: 5 × 1</span></span>
+<span id="cb6-3"><a></a><span class="co">#&gt;   .pred_time</span></span>
+<span id="cb6-4"><a></a><span class="co">#&gt;        &lt;dbl&gt;</span></span>
+<span id="cb6-5"><a></a><span class="co">#&gt; 1     262.  </span></span>
+<span id="cb6-6"><a></a><span class="co">#&gt; 2     113.  </span></span>
+<span id="cb6-7"><a></a><span class="co">#&gt; 3      43.6 </span></span>
+<span id="cb6-8"><a></a><span class="co">#&gt; 4       6.55</span></span>
+<span id="cb6-9"><a></a><span class="co">#&gt; 5     130.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="who-is-likely-to-stop-being-a-customer-1" class="slide level2">
+<h2>Who is likely to stop being a customer?</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a>pred_survival <span class="ot">&lt;-</span> <span class="fu">predict</span>(telco_fit, <span class="at">new_data =</span> telco_train[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, ], </span>
+<span id="cb7-2"><a></a>                         <span class="at">type =</span> <span class="st">"survival"</span>, <span class="at">eval_time =</span> <span class="fu">c</span>(<span class="dv">12</span>, <span class="dv">24</span>))</span>
+<span id="cb7-3"><a></a></span>
+<span id="cb7-4"><a></a>pred_survival</span>
+<span id="cb7-5"><a></a><span class="co">#&gt; # A tibble: 5 × 1</span></span>
+<span id="cb7-6"><a></a><span class="co">#&gt;   .pred           </span></span>
+<span id="cb7-7"><a></a><span class="co">#&gt;   &lt;list&gt;          </span></span>
+<span id="cb7-8"><a></a><span class="co">#&gt; 1 &lt;tibble [2 × 2]&gt;</span></span>
+<span id="cb7-9"><a></a><span class="co">#&gt; 2 &lt;tibble [2 × 2]&gt;</span></span>
+<span id="cb7-10"><a></a><span class="co">#&gt; 3 &lt;tibble [2 × 2]&gt;</span></span>
+<span id="cb7-11"><a></a><span class="co">#&gt; 4 &lt;tibble [2 × 2]&gt;</span></span>
+<span id="cb7-12"><a></a><span class="co">#&gt; 5 &lt;tibble [2 × 2]&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="who-is-likely-to-stop-being-a-customer-2" class="slide level2">
+<h2>Who is likely to stop being a customer?</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a></a>pred_survival<span class="sc">$</span>.pred[[<span class="dv">1</span>]]</span>
+<span id="cb8-2"><a></a><span class="co">#&gt; # A tibble: 2 × 2</span></span>
+<span id="cb8-3"><a></a><span class="co">#&gt;   .eval_time .pred_survival</span></span>
+<span id="cb8-4"><a></a><span class="co">#&gt;        &lt;dbl&gt;          &lt;dbl&gt;</span></span>
+<span id="cb8-5"><a></a><span class="co">#&gt; 1         12          0.931</span></span>
+<span id="cb8-6"><a></a><span class="co">#&gt; 2         24          0.878</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<!-- 
+- show survival curves?
+- predict censored observations only and filter for their individual eval_time == observed_time?
+-->
+</section>
+<section id="tidymodels-for-survival-analysis" class="slide level2">
+<h2>tidymodels for survival analysis</h2>
+<ul>
+<li>Models:<br>
+parametric, semi-parametric, and tree-based</li>
+<li>Predictions:<br>
+survival time, survival probability, hazard, and linear predictor</li>
+<li>Metrics:<br>
+concordance index, Brier score, integrated Brier score, AUC ROC</li>
+</ul>
+</section>
+<section id="tidymodels-for-survival-analysis-1" class="slide level2">
+<h2>tidymodels for survival analysis</h2>
+<p><br></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/tidymodels.png" class="quarto-figure quarto-figure-center" height="500"></p>
+</figure>
+</div>
+</section>
+<section id="learn-more-via-articles-on-tidymodels.org" class="slide level2">
+<h2>Learn more via articles on <a href="https://www.tidymodels.org/">tidymodels.org</a></h2>
+<ul>
+<li><a href="https://www.tidymodels.org/learn/statistics/survival-case-study/">How long until building complaints are dispositioned? A survival analysis case study</a></li>
+<li><a href="https://www.tidymodels.org/learn/statistics/survival-metrics/">Dynamic Performance Metrics for Event Time Data</a></li>
+<li><a href="https://www.tidymodels.org/learn/statistics/survival-metrics-details/">Accounting for Censoring in Performance Metrics for Event Time Data</a></li>
+</ul>
 
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
+<p><a href="https://hfrick.github.io/2024-SatRdays-London" class="uri">https://hfrick.github.io/2024-SatRdays-London</a></p>
+</div>
+</div>
+</section></section>
 
-</div>
-</div>
-</section>
     </div>
   </div>
 
@@ -468,7 +838,7 @@ Hannah Frick
         progress: true,
 
         // Display the page number of the current slide
-        slideNumber: false,
+        slideNumber: 'c/t',
 
         // 'all', 'print', or 'speaker'
         showSlideNumber: 'all',
@@ -593,9 +963,9 @@ Hannah Frick
         // The "normal" size of the presentation, aspect ratio will be preserved
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
-        width: 1050,
+        width: 1280,
 
-        height: 700,
+        height: 720,
 
         // Factor of the display size that should remain empty around the content
         margin: 0.1,
