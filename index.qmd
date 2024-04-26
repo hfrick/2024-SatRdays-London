@@ -1,7 +1,17 @@
 ---
-title: "2024-SatRdays-London"
+title: "Survival analysis is coming to tidymodels!"
+subtitle: "SatRdays London 2024"
 author: "Hannah Frick"
-format: revealjs
+format:
+  revealjs: 
+    slide-number: true
+    show-slide-number: all
+    footer: <https://hfrick.github.io/2024-SatRdays-London>
+    theme: [default, style.scss]
+    css: styles.css
+    highlight-style: a11y
+    width: 1280
+    height: 720
 knitr:
   opts_chunk: 
     echo: true
@@ -9,10 +19,437 @@ knitr:
     comment: "#>"
 ---
 
-This is a Quarto website.
+```{r setup}
+#| echo: false
+#| message: false
+#| warning: false
+library(tidymodels)
+library(censored)
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+options(width = 70)
+
+theme_set(theme_minimal(base_size = 20))
+```
+
+# tidymodels can do survival analysis
+
+# tidymodels can deal with time-to-event data
+
+
+# Why tidymodels?
+
+---
+
+<br><br><br>
+
+::: {.r-fit-text}
+tidymodels is a framework for modelling and 
+
+machine learning using tidyverse principles.
+:::
+
+---
+
+<br><br><br>
+
+::: {.r-fit-text}
+Focus on the modelling question,  
+
+  not the syntax.
+:::
+
+::: {.notes}
+- unify: switch easily between models
+- consistency: 
+- composable functions support chunking
+  - object (a recipe) to hold all preprocessing, apply it in various places
+:::
+---
+
+<br><br><br>
+
+::: {.r-fit-text}
+Focus on the modelling question,  
+
+  not data spending.
+:::
+
+::: {.notes}
+- no accidential data leakage
+- workflows bundle preprocessor and model for resampling
+:::
+---
+
+<br><br><br>
+
+::: {.r-fit-text}
+Focus on the modelling question,  
+
+  not tracking your scripts.
+:::
+
+::: {.notes}
+workflows make (preprocessor + model) easier to track
+workflowsets make workflows easier to track
+:::
+
+
+
+## Extensive {background-image="images/hex-core-pkgs.jpeg"}
+
+resampling, preprocessing, models, metrics, tuning strategies
+
+## Extendable {background-image="images/hex-extension-pkgs.jpeg"}
+
+
+## {background-iframe="https://www.tidymodels.org/learn/#category=developer%20tools"}
+
+::: footer
+:::
+
+# Why survival analysis?
+
+## Customer churn
 
 ```{r}
-1 + 1
+#| eval: false
+wa_churn
 ```
+
+```{r}
+#| echo: false
+data("wa_churn", package = "modeldata")
+
+wa_churn <- wa_churn %>%
+  drop_na() %>%
+  mutate(
+    multiple_lines = if_else(multiple_lines == "No phone service", "No", multiple_lines),
+    across(all_of(c("online_security", "online_backup",
+                    "device_protection", "tech_support", "streaming_tv", 
+                    "streaming_movies")), 
+           ~ if_else(.x == "No internet service", "No", .x))
+  ) %>% 
+  select(-contract, -total_charges) %>%
+  relocate(tenure, churn)
+
+print(wa_churn, n = 6)
+```
+
+
+## What might you want to model with these data?
+
+Let's try to predict:
+
+. . .
+
+- How long is somebody going to stay as a customer?
+
+. . .
+
+- Who is likely to stop being a customer?
+
+
+<!-- Everything is a nail when you only have a hammer. -->
+
+# How long is somebody going to stay as a customer?
+
+
+## What if we just use the time?
+
+```{r df_illustration}
+#| echo: false
+#| fig.align: center
+symbol_observed <- 19
+symbol_censored <- 1
+
+df <- tibble(
+  id = 1:3,
+  obs_start = c(1, 3, 4),
+  obs_end = c(4, 5, 5),
+  status = c(symbol_observed, symbol_censored, symbol_censored)
+)
+
+ggplot(df) +
+  geom_segment(aes(x = obs_start, xend = obs_end, y = id, yend = id, linewidth = I(1.3))) +
+  scale_x_continuous(limits = c(0, 5.5)) +
+  scale_y_continuous(limits = c(0.5, 3.5)) +
+  labs(x = "Time", y = "Observation") +
+  theme_bw() +
+  theme(axis.text.y = element_blank(), legend.position = "top")
+```
+
+. . . 
+
+That time is **observation time**, not **time to event**.
+
+## What if we just use the time?
+
+```{r}
+#| echo: false
+#| fig.align: center
+df <- tibble(
+  id = 1:3,
+  obs_start = c(1, 3, 4),
+  obs_end = c(4, 5, 5),
+  status = c(symbol_observed, symbol_observed, symbol_observed)
+)
+
+ggplot(df) +
+  geom_segment(aes(x = obs_start, xend = obs_end, y = id, yend = id, linewidth = I(1.3))) +
+  geom_point(aes(x = obs_end, y = id, shape = status, size = I(5))) +
+  #geom_vline(aes(xintercept = 5)) +
+  scale_shape_identity("Status",
+                       labels = c("event"),
+                       breaks = c(19),
+                       guide = "legend") +
+  scale_x_continuous(limits = c(0, 5.5)) +
+  scale_y_continuous(limits = c(0.5, 3.5)) +
+  labs(x = "Time", y = "Observation") +
+  theme_bw() +
+  theme(axis.text.y = element_blank(), legend.position = "top")
+```
+
+If we assume that's time-to-event, **we assume everything is an event**.
+
+## What we actually have
+
+```{r}
+#| echo: false
+#| fig.align: center
+symbol_observed <- 19
+symbol_censored <- 1
+
+df <- tibble(
+  id = 1:3,
+  obs_start = c(1, 3, 4),
+  obs_end = c(4, 5, 5),
+  status = c(symbol_observed, symbol_censored, symbol_censored)
+)
+
+ggplot(df) +
+  geom_segment(aes(x = obs_start, xend = obs_end, y = id, yend = id, linewidth = I(1.3))) +
+  geom_point(aes(x = obs_end, y = id, shape = status, size = I(5))) +
+  #geom_vline(aes(xintercept = 5)) +
+  scale_shape_identity("Status",
+                       labels = c("censored", "event"),
+                       breaks = c(1, 19),
+                       guide = "legend") +
+  scale_x_continuous(limits = c(0, 5.5)) +
+  scale_y_continuous(limits = c(0.5, 3.5)) +
+  labs(x = "Time", y = "Observation") +
+  theme_bw() +
+  theme(axis.text.y = element_blank(), legend.position = "top")
+```
+
+::: {.notes}
+- using censored obs as events underestimates the survival time
+- discarding censored obs also biases the results
+- wait until we observe everything? not always possible (dropout of study)
+:::
+
+## Uncomfy
+
+If we use regression to model time-to-event data, we might
+
+- answer a different question
+- make wrong assumptions
+- waste information
+
+
+
+# Who is likely to stop being a customer?
+
+## What if we just use the event status?
+
+```{r}
+#| echo: false
+#| fig.align: center
+symbol_observed <- 19
+symbol_censored <- 1
+
+df <- tibble(
+  id = 1:3,
+  obs_start = c(1, 3, 4),
+  obs_end = c(4, 5, 5),
+  status = c(symbol_observed, symbol_censored, symbol_censored)
+)
+
+ggplot(df) +
+  geom_segment(aes(x = obs_start, xend = obs_end, y = id, yend = id, linewidth = I(1.3), color = I("gray"))) +
+  geom_point(aes(x = obs_end, y = id, shape = status, size = I(5))) +
+  #geom_vline(aes(xintercept = 5)) +
+  scale_shape_identity("Status",
+                       labels = c("censored", "event"),
+                       breaks = c(1, 19),
+                       guide = "legend") +
+  scale_x_continuous(limits = c(0, 5.5)) +
+  scale_y_continuous(limits = c(0.5, 3.5)) +
+  labs(x = "Time", y = "Observation") +
+  theme_bw() +
+  theme(axis.text.y = element_blank(), legend.position = "top")
+```
+
+. . .
+
+Who is likely to stop being a customer _while we observe them?_
+
+<!-- --- -->
+
+```{r}
+#| echo: false
+#| eval: false
+#| fig.align: center
+symbol_observed <- 19
+symbol_censored <- 1
+
+df <- tibble(
+  id = 1:3,
+  obs_start = c(0, 0, 0),
+  obs_end = c(3, 1, 2),
+  status = c(symbol_censored, symbol_censored, symbol_observed)
+)
+
+ggplot(df) +
+  geom_segment(aes(x = obs_start, xend = obs_end, y = id, yend = id, linewidth = I(1.3))) +
+  geom_point(aes(x = obs_end, y = id, shape = status, size = I(5))) +
+  geom_vline(aes(xintercept = 2, linetype = I("dashed"))) +
+  scale_shape_identity("Status",
+                       labels = c("censored", "event"),
+                       breaks = c(1, 19),
+                       guide = "legend") +
+  scale_x_continuous(limits = c(0, 5.5)) +
+  scale_y_continuous(limits = c(0.5, 3.5)) +
+  labs(x = "Time", y = "Observation") +
+  theme_bw() +
+  theme(axis.text.y = element_blank(), legend.position = "top")
+```
+
+<!-- 
+---
+
+FIXME: add translation of this idea to Kaplan-Meier?
+-->
+
+
+## Uncomfy
+
+<br><br>
+
+If we use classification to model (time-to-)event data, we  
+
+ignore the (possibly wildly) different observation length.
+
+
+## Our challenge
+
+- Time-to-event data inherently has two aspects: time and event status.
+- Censoring: incomplete data is not missing data.
+
+. . .
+
+- _With regression and classification we can only model one aspect, separately, without being able to properly account for the other aspect._
+
+---
+
+<br><br>
+
+> Survival analysis is unique because it simultaneously considers _if_ events happened (i.e. a binary outcome) and _when_ events happened (e.g. a continuous outcome).[^1]
+
+[^1]: Denfeld QE, Burger D, Lee CS (2023) _Survival analysis 101: an easy start guide to analysing time-to-event data_. European Journal of Cardiovascular Nursing, Volume 22, Issue 3, Pages 332–337, <https://doi.org/10.1093/eurjcn/zvad023>
+
+## 
+
+![](images/how-to-draw-an-owl.jpeg){fig-align="center"}
+
+
+## Customer churn
+
+```{r}
+telco_churn <- wa_churn %>% 
+  mutate(
+    churn_surv = Surv(tenure, if_else(churn == "Yes", 1, 0)),
+    .keep = "unused"
+  )
+```
+
+::: {.notes}
+- Surv = response
+- modify response outside of recipes
+:::
+
+## Split the data
+
+```{r}
+#| code-line-numbers: "1-2|3-4|6"
+set.seed(403)
+telco_split <- initial_split(telco_churn)
+telco_train <- training(telco_split)
+telco_test <- testing(telco_split)
+
+telco_rs <- vfold_cv(telco_train)
+```
+
+## A single model
+
+```{r}
+#| code-line-numbers: "1-2|4-6|8-10|12"
+telco_rec <- recipe(churn_surv ~ ., data = telco_train) %>% 
+  step_zv(all_predictors()) 
+
+telco_spec <- survival_reg() %>%
+  set_mode("censored regression") %>%
+  set_engine("survival")
+
+telco_wflow <- workflow() %>%
+  add_recipe(telco_rec) %>%
+  add_model(telco_spec)
+
+telco_fit <- fit(telco_wflow, data = telco_train)
+```
+
+## How long is somebody going to stay as a customer?
+
+```{r}
+predict(telco_fit, new_data = telco_train[1:5, ], type = "time")
+```
+
+## Who is likely to stop being a customer?
+
+```{r}
+pred_survival <- predict(telco_fit, new_data = telco_train[1:5, ], 
+                         type = "survival", eval_time = c(12, 24))
+
+pred_survival
+```
+
+## Who is likely to stop being a customer?
+
+```{r}
+pred_survival$.pred[[1]]
+```
+
+<!-- 
+- show survival curves?
+- predict censored observations only and filter for their individual eval_time == observed_time?
+-->
+
+## tidymodels for survival analysis
+
+- Models:  
+  parametric, semi-parametric, and tree-based
+- Predictions:  
+  survival time, survival probability, hazard, and linear predictor
+- Metrics:  
+  concordance index, Brier score, integrated Brier score, AUC ROC
+
+## tidymodels for survival analysis
+
+<br>
+
+![](images/tidymodels.png){fig-align="center" height="500"}
+
+## Learn more via articles on [tidymodels.org](https://www.tidymodels.org/)
+
+- [How long until building complaints are dispositioned? A survival analysis case study](https://www.tidymodels.org/learn/statistics/survival-case-study/)
+- [Dynamic Performance Metrics for Event Time Data](https://www.tidymodels.org/learn/statistics/survival-metrics/)
+- [Accounting for Censoring in Performance Metrics for Event Time Data](https://www.tidymodels.org/learn/statistics/survival-metrics-details/)
