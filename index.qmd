@@ -380,13 +380,12 @@ telco_churn <- wa_churn %>%
 ## Split the data
 
 ```{r}
-#| code-line-numbers: "1-2|3-4|6"
+#| code-line-numbers: "1-2|4-5"
 set.seed(403)
 telco_split <- initial_split(telco_churn)
+
 telco_train <- training(telco_split)
 telco_test <- testing(telco_split)
-
-telco_rs <- vfold_cv(telco_train)
 ```
 
 ## A single model

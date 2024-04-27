@@ -88,7 +88,7 @@
     "href": "index.html#split-the-data",
     "title": "Survival analysis is coming to tidymodels!",
     "section": "Split the data",
-    "text": "Split the data\n\nset.seed(403)\ntelco_split &lt;- initial_split(telco_churn)\ntelco_train &lt;- training(telco_split)\ntelco_test &lt;- testing(telco_split)\n\ntelco_rs &lt;- vfold_cv(telco_train)"
+    "text": "Split the data\n\nset.seed(403)\ntelco_split &lt;- initial_split(telco_churn)\n\ntelco_train &lt;- training(telco_split)\ntelco_test &lt;- testing(telco_split)"
   },
   {
     "objectID": "index.html#a-single-model",

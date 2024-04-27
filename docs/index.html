@@ -681,12 +681,11 @@ FIXME: add translation of this idea to Kaplan-Meier?
 <section id="split-the-data" class="slide level2">
 <h2>Split the data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4" data-code-line-numbers="1-2|3-4|6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a><span class="fu">set.seed</span>(<span class="dv">403</span>)</span>
+<div class="sourceCode cell-code" id="cb4" data-code-line-numbers="1-2|4-5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a><span class="fu">set.seed</span>(<span class="dv">403</span>)</span>
 <span id="cb4-2"><a></a>telco_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(telco_churn)</span>
-<span id="cb4-3"><a></a>telco_train <span class="ot">&lt;-</span> <span class="fu">training</span>(telco_split)</span>
-<span id="cb4-4"><a></a>telco_test <span class="ot">&lt;-</span> <span class="fu">testing</span>(telco_split)</span>
-<span id="cb4-5"><a></a></span>
-<span id="cb4-6"><a></a>telco_rs <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(telco_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-3"><a></a></span>
+<span id="cb4-4"><a></a>telco_train <span class="ot">&lt;-</span> <span class="fu">training</span>(telco_split)</span>
+<span id="cb4-5"><a></a>telco_test <span class="ot">&lt;-</span> <span class="fu">testing</span>(telco_split)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="a-single-model" class="slide level2">
