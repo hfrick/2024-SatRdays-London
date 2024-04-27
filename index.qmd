@@ -64,6 +64,7 @@ Focus on the modelling question,
 - composable functions support chunking
   - object (a recipe) to hold all preprocessing, apply it in various places
 :::
+
 ---
 
 <br><br><br>
@@ -71,27 +72,38 @@ Focus on the modelling question,
 ::: {.r-fit-text}
 Focus on the modelling question,  
 
-  not data spending.
+  not the infrastructure for  
+  empirical validation.
 :::
 
-::: {.notes}
-- no accidential data leakage
-- workflows bundle preprocessor and model for resampling
-:::
----
+<!-- --- -->
 
-<br><br><br>
+<!-- <br><br><br> -->
 
-::: {.r-fit-text}
-Focus on the modelling question,  
+<!-- ::: {.r-fit-text} -->
+<!-- Focus on the modelling question,   -->
 
-  not tracking your scripts.
-:::
+<!--   not data spending. -->
+<!-- ::: -->
 
-::: {.notes}
-workflows make (preprocessor + model) easier to track
-workflowsets make workflows easier to track
-:::
+<!-- ::: {.notes} -->
+<!-- - no accidential data leakage -->
+<!-- - workflows bundle preprocessor and model for resampling -->
+<!-- ::: -->
+<!-- --- -->
+
+<!-- <br><br><br> -->
+
+<!-- ::: {.r-fit-text} -->
+<!-- Focus on the modelling question,   -->
+
+<!--   not tracking your scripts. -->
+<!-- ::: -->
+
+<!-- ::: {.notes} -->
+<!-- workflows make (preprocessor + model) easier to track -->
+<!-- workflowsets make workflows easier to track -->
+<!-- ::: -->
 
 
 
